@@ -1,15 +1,17 @@
 /*
-Christian Valencia
-2275944
-valen193@mail.chapman.edu
-CPSC 350 - Data Structures
-#Assignment 1
+    Christian Valencia
+    2275944
+    valen193@mail.chapman.edu
+    CPSC 350 - Data Structures
+    #Assignment 1
 */
+
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include <math.h>
 #include <random>
+#include <time.h>
 
 using namespace std;
 
@@ -51,15 +53,17 @@ bool validString(string str)
   return 1;
 }
 
-//A simple count of a files valid lines
+//A simple count of a file's valid lines
 int countLines(ifstream& file)
 {
     int num = 0;
     string line;
     if(file.is_open())
     {
+      //These two files reset the getline function
       file.clear();
       file.seekg(0);
+
       while (getline (file, line))
       {
         if(validString(line))
@@ -71,7 +75,7 @@ int countLines(ifstream& file)
     return num;
 }
 
-//finds the sum of the lenghts of a file's lines
+//Finds the sum of the lenghts of a file's lines
 int findSum(ifstream& file)
 {
     int s = 0;
@@ -80,6 +84,7 @@ int findSum(ifstream& file)
     {
       file.clear();
       file.seekg(0);
+
       while (getline (file, line))
       {
         if(validString(line))
@@ -107,6 +112,7 @@ double findVariance(ifstream& file, int num, float mean)
   {
     file.clear();
     file.seekg(0);
+
     while (getline (file, line))
     {
       if(validString(line))
@@ -124,23 +130,26 @@ double findSD(double var)
     return sqrt(var);
 }
 
-//enter a captial nucleotide to find the probability
+//Enter a captial nucleotide to find the probability
 float singleProb(ifstream& file, char nucleotide, ofstream& out)
 {
   float total = 0;
   float matches = 0;
   string line;
   char c;
+
   if(file.is_open())
   {
     file.clear();
     file.seekg(0);
+
     while (getline (file, line))
     {
       if(validString(line))
       {
         for (int i = 0; i < (line.size()-1); i++)
         {
+          //Here we keep track of the total and the number of matches
           total++;
           c = toupper(line[i]);
           if (c == nucleotide) matches++;
@@ -148,35 +157,41 @@ float singleProb(ifstream& file, char nucleotide, ofstream& out)
       }
     }
   }
+  //Then calculate the probability
   float prob = matches/total * 100;
+
+//If there is a file open we print directly out
+//to it and return the value for later use
   if(out.is_open())
   {
     out << "There is a: " << prob << "% chance of " << nucleotide << endl;
   }
+
   return prob;
 }
 
-//like the previous function but takes in two nucleotides
+//Like the previous function but takes in two nucleotides
 void biGramProb(ifstream& file, string bi, ofstream& out)
 {
   float total = 0;
   float matches = 0;
   string line;
   string sub;
+
   if(file.is_open())
   {
     file.clear();
     file.seekg(0);
+
     while (getline (file, line))
     {
       if(validString(line))
       {
         line = UpperString(line);
-        //cout << line << endl;
+        //Divides up string
         for (int i = 0; i < (line.size()-1); i++)
         {
           sub = line.substr(i,2);
-          //cout << sub << endl;
           if (sub == bi)
           {
             matches++;
@@ -239,7 +254,9 @@ void generateNewDNA(int amount, float mean, double sd, float aProb, float tProb,
     double pi = 3.1415926535897;
     string nucleotide;
 
-    default_random_engine random;
+    //initialize seed for randoms
+    srand (time(NULL));
+    default_random_engine random(time(0));
     uniform_real_distribution<double> distribution(0.0,1.0);
 
     while (repeat > 0)
@@ -256,21 +273,24 @@ void generateNewDNA(int amount, float mean, double sd, float aProb, float tProb,
         b = distribution(random);
       }
 
+
       C = (sqrt(-2 * log(a))* cos(2*pi*b));
       D = sd * C + mean;
+
       for(int i = 0; i < D; i++)
       {
         r = (rand() % 100 + 1);
         nucleotide = probability(r, aProb, tProb, cProb, gProb);
         out << nucleotide;
       }
-      out << endl;
-      repeat--;
+      if(D > 0)
+      {
+        out << endl;
+        repeat--;
+      }
     }
   }
 }
-
-
 
 //Takes in a filepath and runs all calculations and outputs to Valencia.out
 void analyze(string filepath)
@@ -340,8 +360,10 @@ int main(int argc, char** argv)
 
     string filepath =  argv[1];
 
+    //Main function
     analyze(filepath);
 
+    //Looping mechanisms
     while (!done)
     {
       cout << "Would you like to analyze another file? [Y/N]" << endl;
