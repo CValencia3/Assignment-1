@@ -296,7 +296,7 @@ void generateNewDNA(int amount, float mean, double sd, float aProb, float tProb,
 void analyze(string filepath)
 {
   cout << "Reading from " << filepath << endl;
-  ofstream fileOut ("valencia.out", ios::app);
+  ofstream fileOut ("results.txt", ios::app);
   if (fileOut.is_open())
   {
     ifstream fileIn (filepath);
@@ -340,7 +340,7 @@ void analyze(string filepath)
       fileOut << endl;
 
       fileIn.close();
-      cout << "Results have be saved to valencia.out" << endl;
+      cout << "Results have be saved to results.txt" << endl;
     }
     else
     {
@@ -353,7 +353,7 @@ void analyze(string filepath)
 
 int main(int argc, char** argv)
 {
-  if(argc > 0)
+  if((argc > 0) && (argv[1] != NULL))
   {
     bool done = false;
     string io;

@@ -8,17 +8,23 @@ CPSC 350 - Data Structures
 
 #Assignment 1
 
+
+
 Source Files:
-    main.cpp
-    main.out
-    test.txt
+
+	main.cpp
+
+	main.out
+
+	test.txt
 
 Description:
-    Analyzes DNA sequences to find statistical information about their lengths and composition.
-    Outputs results and generates 1000 new sequences based on the data in valencia.out.
+    	Analyzes DNA sequences to find statistical information about their lengths and composition.
+    	Outputs results and generates 1000 new sequences based on the data in results.txt.
 
 How to Run:
-    Run main.out with a command line argument containing a filepath for a text file.
+
+	Run ./main.out with a command line argument containing a filepath for a text file.
 
 References:
     https://www.mathsisfun.com/data/standard-deviation.html
